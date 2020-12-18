@@ -1,13 +1,20 @@
 # Daily Organizer
 
-This repository was built to deploy a **Daily Organizer App** to [GitHub Pages]() using [gh-pages](). This app uses React and Redux to display components. Routing determines which component to display. Express allows to communicate with MongoDB through REST API. If you want to add a database, take a look at my GitHub repository [express-react-app](https://github.com/marcoandre1/express-react-app).
+This repository was built to deploy a **Daily Organizer App** to [GitHub Pages](https://pages.github.com/) using [gh-pages](https://www.npmjs.com/package/gh-pages). This app uses [React](https://reactjs.org/) and [Redux](https://redux.js.org/) to display components. Routing determines which component to display. If you want to add a database, take a look at my GitHub repository [express-react-app](https://github.com/marcoandre1/express-react-app).
 
 > To run this project locally, clone the project and run `npm run dev`.
 > To deploy, use `git bash` and run `npm run deploy`.
 
 ## Index
 
-1. [Setting up a new project]()
+1. [Setting up a new project](https://github.com/marcoandre1/daily-organizer#setting-up-a-new-project)
+2. [Create default application state as JSON file for development](https://github.com/marcoandre1/daily-organizer#create-default-application-state-as-JSON-file-for-development)
+3. [Create Redux store](https://github.com/marcoandre1/daily-organizer#create-redux-store)
+4. [Connect a Dashboard component to the Redux store](https://github.com/marcoandre1/daily-organizer#connect-a-dashboard-component-to-the-redux-store)
+
+## Setting up a new project
+
+> **NOTE:** the following steps allow you to set up a project from scratch. The output is very similar to what you would get with [Create React App](https://create-react-app.dev/docs/getting-started/). _The only difference is that you are going to understand the **magic** behind Create React App._  
 
 - Create a `package.json` file: `npm init --yes`.  
 - Install `Webpack`: `npm install --save-dev webpack`.  
@@ -140,3 +147,170 @@ ReactDOM.render(
 > **NOTE:** As of [Webpack 5](https://webpack.js.org/blog/2020-10-10-webpack-5-release/), the script command is not anymore `webpack-dev-server` but `webpack serve`. For more info, see: [webpack-dev-server](https://github.com/webpack/webpack-dev-server#webpack-dev-server) and [DevServer](https://webpack.js.org/configuration/dev-server/).  
 
 - Run the application: `npm run dev`.  
+
+## Create default application state as JSON file for development
+
+- Add `src/server/defaultState.js` file:
+
+```js
+export const defaultState = {
+    users:[{
+        id:"U1",
+        name:"Dev"
+    },{
+        id:"U2",
+        name:"C. Eeyo"
+    }],
+    groups:[{
+        name:"To Do",
+        id:"G1",
+        owner:"U1"
+    },{
+        name:"Doing",
+        id:"G2",
+        owner:"U1"
+    },{
+        name:"Done",
+        id:"G3",
+        owner:"U1"
+    }
+    ],
+    tasks:[{
+        name:"Refactor tests",
+        id:"T1",
+        group:"G1",
+        owner:"U1",
+        isComplete:false,
+    },{
+        name:"Meet with CTO",
+        id:"T2",
+        group:"G1",
+        owner:"U1",
+        isComplete:true,
+    },{
+        name:"Compile ES6",
+        id:"T3",
+        group:"G2",
+        owner:"U2",
+        isComplete:false,
+    },{
+        name:"Update component snapshots",
+        id:"T4",
+        group:"G2",
+        owner:"U1",
+        isComplete:true,
+    },{
+        name:"Production optimizations",
+        id:"T5",
+        group:"G3",
+        owner:"U1",
+        isComplete:false,
+    }],
+    comments:[{
+        owner:"U1",
+        id:"C1",
+        task:"T1",
+        content:"Great work!"
+    }]
+};
+```
+
+## Create Redux store
+
+- Install Redux: `npm install --save redux`.
+- Create **Redux store** at `src/app/store/index.jsx`:
+
+```jsx
+import { createStore } from 'redux';
+import { defaultState } from '../../server/defaultState';
+
+export const store = createStore(
+    function reducer (state = defaultState, action) {
+        return state;
+    }
+);
+```
+
+## Connect a Dashboard component to the Redux store
+
+- Add the `Dashboard` component at `src/app/components/Dashboard.jsx`:  
+
+```jsx
+/**
+ * The dashboard is a simple React component that contains several lists of tasks,
+ * one for each group that belongs to the user.
+ */
+
+import React from 'react';
+import { connect } from 'react-redux';
+import { ConnectedTaskList } from './TaskList';
+
+export const Dashboard = ({groups})=>(
+    <div>
+        <h2>Dashboard</h2>
+        {groups.map(group=>(
+            <ConnectedTaskList key={group.id} id={group.id} name={group.name}/>
+        ))}
+    </div>
+);
+
+function mapStateToProps(state) {
+    return {
+        groups:state.groups
+    }
+}
+
+export const ConnectedDashboard = connect(mapStateToProps)(Dashboard);
+```
+
+- Add the `TaskList` component at `src/app/components/TaskList.jsx`:  
+
+```jsx
+import React from 'react';
+import { connect } from 'react-redux';
+
+export const TaskList = ({tasks, name})=>(
+    <div className="card p-2 m-2">
+        <h3>
+            {name}
+        </h3>
+        <div>
+            {tasks.map(task=>(
+                <div key={task.id}>{task.name}</div>
+            ))}
+        </div>
+    </div>
+);
+
+const mapStateToProps = (state, ownProps)=>{
+    let groupID = ownProps.id;
+    return {
+        name: ownProps.name,
+        id: groupID,
+        tasks: state.tasks.filter(task=>task.group === groupID)
+    };
+};
+
+export const ConnectedTaskList = connect(mapStateToProps)(TaskList);
+```
+
+- Update `Main` component to include the **Redux store** and the `Dashboard` component:
+
+```jsx
+import React from 'react';
+import { Provider } from 'react-redux';
+import { store } from '../store';
+import { ConnectedDashboard } from "./Dashboard";
+
+const Main = () => {
+    return (
+        <Provider store={store}>
+            <div className="container mt-3">
+                <ConnectedDashboard/>
+            </div>
+        </Provider>
+    );
+};
+
+export default Main;
+```
