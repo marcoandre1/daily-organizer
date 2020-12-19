@@ -9,7 +9,7 @@ module.exports = {
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template: 'index.html',
-            rootFolder: '/daily-organizer',
+            repo: '/daily-organizer',
             inject: false
           })
       ],

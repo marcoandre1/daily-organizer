@@ -324,7 +324,7 @@ For this to work, you previously need to install **gh-pages** (`npm install gh-p
 ```json
 {
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --config webpack.prod.js",
     "deploy": "npm run build && gh-pages -d build"
   }
 }
@@ -333,15 +333,17 @@ For this to work, you previously need to install **gh-pages** (`npm install gh-p
 You will also need to update `webpack.config.js` and `index.html`.  
 
 - Install [HtmlWebpackPlugin](https://webpack.js.org/guides/output-management/#setting-up-htmlwebpackplugin) (`npm install --save-dev html-webpack-plugin`) and adjust the `webpack.config.js` file.
-- Install [clean-webpack-plugin](https://webpack.js.org/guides/output-management/#cleaning-up-the-dist-folder) (npm install --save-dev clean-webpack-plugin) and configure it.
+- Install [clean-webpack-plugin](https://webpack.js.org/guides/output-management/#cleaning-up-the-dist-folder) (`npm install --save-dev clean-webpack-plugin`) and configure it.
 
+Finally, because we are deploying to `https://<USERNAME>.github.io/<REPO>`, you will need to add a `webpack.prod.js` file at the root of the project. This is the easiest way I found to tell **Webpack** to prefix the `/bundle.js` path with the `repo` in the `index.html` template.
 
-#### References
+### For more info, take a look at the following references
 
-1. [Inserting variables into HTML and JavaScript with Webpack](https://medium.com/dailyjs/inserting-variables-into-html-and-javascript-with-webpack-80f33625edc6) - Add `<%= htmlWebpackPlugin.options.rootFolder %>` to `index.html`.  
-2. [HTML Webpack Plugin](https://github.com/jantimon/html-webpack-plugin) - Check the **Options** and the **Writing Your Own Templates**.  
+1. [Inserting variables into HTML and JavaScript with Webpack](https://medium.com/dailyjs/inserting-variables-into-html-and-javascript-with-webpack-80f33625edc6) - This explains why we add a `<%= htmlWebpackPlugin.options.repo %>` to `index.html`.  
+2. [HTML Webpack Plugin](https://github.com/jantimon/html-webpack-plugin) - Check the **Options** and the **Writing Your Own Templates**. It helps to understand the plugin use cases.  
 3. [Webpack Configuration](https://webpack.js.org/configuration/).  
-4. [Webpack Output Management](https://webpack.js.org/guides/output-management/).
-5. [Webpack HtmlWebpackPlugin](https://webpack.js.org/plugins/html-webpack-plugin/).
+4. [Webpack Output Management](https://webpack.js.org/guides/output-management/).  
+5. [Webpack HtmlWebpackPlugin](https://webpack.js.org/plugins/html-webpack-plugin/).  
 6. [Webpack Development](https://webpack.js.org/guides/development/).  
-7. []().  
+7. [Webpack Production](https://webpack.js.org/guides/production/).  
+
