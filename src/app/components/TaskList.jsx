@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-export const TaskList = ({tasks, name})=>(
+export const TaskList = ({tasks, name}) => (
     <div className="card p-2 m-2">
         <h3>
             {name}
@@ -14,7 +14,7 @@ export const TaskList = ({tasks, name})=>(
     </div>
 );
 
-const mapStateToProps = (state, ownProps)=>{
+const mapStateToProps = (state, ownProps) => {
     let groupID = ownProps.id;
     return {
         name: ownProps.name,

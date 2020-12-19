@@ -7,10 +7,11 @@ This repository was built to deploy a **Daily Organizer App** to [GitHub Pages](
 
 ## Index
 
-1. [Setting up a new project](https://github.com/marcoandre1/daily-organizer#setting-up-a-new-project)
-2. [Create default application state as JSON file for development](https://github.com/marcoandre1/daily-organizer#create-default-application-state-as-JSON-file-for-development)
-3. [Create Redux store](https://github.com/marcoandre1/daily-organizer#create-redux-store)
-4. [Connect a Dashboard component to the Redux store](https://github.com/marcoandre1/daily-organizer#connect-a-dashboard-component-to-the-redux-store)
+1. [Setting up a new project](https://github.com/marcoandre1/daily-organizer#setting-up-a-new-project)  
+2. [Create default application state as JSON file for development](https://github.com/marcoandre1/daily-organizer#create-default-application-state-as-JSON-file-for-development)  
+3. [Create Redux store](https://github.com/marcoandre1/daily-organizer#create-redux-store)  
+4. [Connect a Dashboard component to the Redux store](https://github.com/marcoandre1/daily-organizer#connect-a-dashboard-component-to-the-redux-store)  
+5. [Deploy to GitHub pages](https://github.com/marcoandre1/daily-organizer#deploy-to-github-pages)  
 
 ## Setting up a new project
 
@@ -133,12 +134,11 @@ ReactDOM.render(
 
 > **NOTE:** We use [BootstrapCDN](https://getbootstrap.com/docs/4.4/getting-started/introduction/) for this project.
 
-- Add the following scripts to `package.json`:  
+- Add the following script to `package.json`:  
 
 ```json
 {
   "scripts": {
-    "start": "webpack",
     "dev": "webpack serve"
   },
 }
@@ -245,7 +245,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ConnectedTaskList } from './TaskList';
 
-export const Dashboard = ({groups})=>(
+export const Dashboard = ({groups}) => (
     <div>
         <h2>Dashboard</h2>
         {groups.map(group=>(
@@ -269,7 +269,7 @@ export const ConnectedDashboard = connect(mapStateToProps)(Dashboard);
 import React from 'react';
 import { connect } from 'react-redux';
 
-export const TaskList = ({tasks, name})=>(
+export const TaskList = ({tasks, name}) => (
     <div className="card p-2 m-2">
         <h3>
             {name}
@@ -282,7 +282,7 @@ export const TaskList = ({tasks, name})=>(
     </div>
 );
 
-const mapStateToProps = (state, ownProps)=>{
+const mapStateToProps = (state, ownProps) => {
     let groupID = ownProps.id;
     return {
         name: ownProps.name,
@@ -314,3 +314,34 @@ const Main = () => {
 
 export default Main;
 ```
+
+## Deploy to GitHub pages
+
+This web application is ready for deployment using [gh-pages](https://www.npmjs.com/package/gh-pages). Simply run the following command in `git bash`: `npm run deploy`.
+
+For this to work, you previously need to install **gh-pages** (`npm install gh-pages --save-dev`) and update the `package.json` scripts:
+
+```json
+{
+  "scripts": {
+    "build": "webpack",
+    "deploy": "npm run build && gh-pages -d build"
+  }
+}
+```
+
+You will also need to update `webpack.config.js` and `index.html`.  
+
+- Install [HtmlWebpackPlugin](https://webpack.js.org/guides/output-management/#setting-up-htmlwebpackplugin) (`npm install --save-dev html-webpack-plugin`) and adjust the `webpack.config.js` file.
+- Install [clean-webpack-plugin](https://webpack.js.org/guides/output-management/#cleaning-up-the-dist-folder) (npm install --save-dev clean-webpack-plugin) and configure it.
+
+
+#### References
+
+1. [Inserting variables into HTML and JavaScript with Webpack](https://medium.com/dailyjs/inserting-variables-into-html-and-javascript-with-webpack-80f33625edc6) - Add `<%= htmlWebpackPlugin.options.rootFolder %>` to `index.html`.  
+2. [HTML Webpack Plugin](https://github.com/jantimon/html-webpack-plugin) - Check the **Options** and the **Writing Your Own Templates**.  
+3. [Webpack Configuration](https://webpack.js.org/configuration/).  
+4. [Webpack Output Management](https://webpack.js.org/guides/output-management/).
+5. [Webpack HtmlWebpackPlugin](https://webpack.js.org/plugins/html-webpack-plugin/).
+6. [Webpack Development](https://webpack.js.org/guides/development/).  
+7. []().  
