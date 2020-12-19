@@ -148,6 +148,8 @@ ReactDOM.render(
 
 - Run the application: `npm run dev`.  
 
+> Because we specify the `open: true` option in `webpack.config.js`, your browser should open automatically. If does not open it and navigate to <http://localhost:8080/>. You should see `Daily Organizer` displayed on the top left of the screen.  
+
 ## Create default application state as JSON file for development
 
 - Add `src/server/defaultState.js` file:
@@ -315,6 +317,8 @@ const Main = () => {
 export default Main;
 ```
 
+> Now, if you run: `npm run dev`, you should see the _default tasks_ loaded to your browser.
+
 ## Deploy to GitHub pages
 
 This web application is ready for deployment using [gh-pages](https://www.npmjs.com/package/gh-pages). Simply run the following command in `git bash`: `npm run deploy`.
@@ -335,7 +339,7 @@ You will also need to update `webpack.config.js` and `index.html`.
 - Install [HtmlWebpackPlugin](https://webpack.js.org/guides/output-management/#setting-up-htmlwebpackplugin) (`npm install --save-dev html-webpack-plugin`) and adjust the `webpack.config.js` file.
 - Install [clean-webpack-plugin](https://webpack.js.org/guides/output-management/#cleaning-up-the-dist-folder) (`npm install --save-dev clean-webpack-plugin`) and configure it.
 
-Finally, because we are deploying to `https://<USERNAME>.github.io/<REPO>`, you will need to add a `webpack.prod.js` file at the root of the project. This is the easiest way I found to tell **Webpack** to prefix the `/bundle.js` path with the `repo` in the `index.html` template.
+Finally, because we are deploying to `https://<USERNAME>.github.io/<REPO>`, you will need to add a `webpack.prod.js` file at the root of the project. This is the easiest way I found to tell **Webpack** to prefix the `/bundle.js` path in `index.html` with the `repo`.
 
 ### For more info, take a look at the following references
 
@@ -346,4 +350,3 @@ Finally, because we are deploying to `https://<USERNAME>.github.io/<REPO>`, you 
 5. [Webpack HtmlWebpackPlugin](https://webpack.js.org/plugins/html-webpack-plugin/).  
 6. [Webpack Development](https://webpack.js.org/guides/development/).  
 7. [Webpack Production](https://webpack.js.org/guides/production/).  
-
