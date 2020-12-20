@@ -12,6 +12,7 @@ This repository was built to deploy a **Daily Organizer App** to [GitHub Pages](
 3. [Create Redux store](https://github.com/marcoandre1/daily-organizer#create-redux-store)  
 4. [Connect a Dashboard component to the Redux store](https://github.com/marcoandre1/daily-organizer#connect-a-dashboard-component-to-the-redux-store)  
 5. [Deploy to GitHub pages](https://github.com/marcoandre1/daily-organizer#deploy-to-github-pages)  
+6. [Add Routing and Navigation](https://github.com/marcoandre1/daily-organizer#add-routing-and-navigation)  
 
 ## Setting up a new project
 
@@ -336,8 +337,8 @@ For this to work, you previously need to install **gh-pages** (`npm install gh-p
 
 You will also need to update `webpack.config.js` and `index.html`.  
 
-- Install [HtmlWebpackPlugin](https://webpack.js.org/guides/output-management/#setting-up-htmlwebpackplugin) (`npm install --save-dev html-webpack-plugin`) and adjust the `webpack.config.js` file.
-- Install [clean-webpack-plugin](https://webpack.js.org/guides/output-management/#cleaning-up-the-dist-folder) (`npm install --save-dev clean-webpack-plugin`) and configure it.
+- Install [HtmlWebpackPlugin](https://webpack.js.org/guides/output-management/#setting-up-htmlwebpackplugin) (`npm install --save-dev html-webpack-plugin`) and adjust the `webpack.config.js` file.  
+- Install [clean-webpack-plugin](https://webpack.js.org/guides/output-management/#cleaning-up-the-dist-folder) (`npm install --save-dev clean-webpack-plugin`) and configure it.  
 
 Finally, because we are deploying to `https://<USERNAME>.github.io/<REPO>`, you will need to add a `webpack.prod.js` file at the root of the project. This is the easiest way I found to tell **Webpack** to prefix the `/bundle.js` path in `index.html` with the `repo`.
 
@@ -350,3 +351,57 @@ Finally, because we are deploying to `https://<USERNAME>.github.io/<REPO>`, you 
 5. [Webpack HtmlWebpackPlugin](https://webpack.js.org/plugins/html-webpack-plugin/).  
 6. [Webpack Development](https://webpack.js.org/guides/development/).  
 7. [Webpack Production](https://webpack.js.org/guides/production/).  
+
+## Add Routing and Navigation
+
+- Add **react-router-dom**: `npm install react-router-dom --save`.  
+- Add a new `Navigation` component at `src/app/components/Navigation.jsx`:
+
+```jsx
+/**
+ * The navigation component is present on all non-login pages,
+ * and contains a link back to the dashboard, and the user's name.
+ */
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import React from 'react';
+
+const Navigation = ()=>(
+    <div className="header">
+        <Link to="/dashboard">
+            <h1>
+                My Application
+            </h1>
+        </Link>
+    </div>
+);
+
+export const ConnectedNavigation = connect(state=>state)(Navigation);
+```
+
+- Update `Main.jsx` to import the `Navigation` component and `BrowserRouter` and `Route` from `react-router-dom`:
+
+```jsx
+import React from 'react';
+import { Provider } from 'react-redux';
+import { store } from '../store';
+import { ConnectedDashboard } from './Dashboard';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { ConnectedNavigation } from './Navigation';
+
+export const Main = () =>(
+    <BrowserRouter>
+        <Provider store={store}>
+            <div className="container mt-3">
+                <ConnectedNavigation/>
+                {/*<ConnectedDashboard/>*/}
+                <Route
+                    exact
+                    path="/dashboard"
+                    render={ () => (<ConnectedDashboard/>)}
+                />
+            </div>
+        </Provider>
+    </BrowserRouter>
+);
+```
