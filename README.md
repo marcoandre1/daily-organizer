@@ -368,9 +368,9 @@ import React from 'react';
 
 const Navigation = ()=>(
     <div className="header">
-        <Link to="/dashboard">
+        <Link to={`${REPO}/dashboard`}>
             <h1>
-                My Application
+                Daily Organizer
             </h1>
         </Link>
     </div>
@@ -397,7 +397,7 @@ export const Main = () =>(
                 {/*<ConnectedDashboard/>*/}
                 <Route
                     exact
-                    path="/dashboard"
+                    path={`${REPO}/dashboard`}
                     render={ () => (<ConnectedDashboard/>)}
                 />
             </div>
@@ -405,3 +405,5 @@ export const Main = () =>(
     </BrowserRouter>
 );
 ```
+
+> **NOTE:** take a close look at the `REPO` variable. This is necessary because we are deploying to `https://<USERNAME>.github.io/<REPO>`. For this to work, you will need to add the [publicPath](https://webpack.js.org/guides/public-path/) configuration option and the [DefinePlugin](https://webpack.js.org/plugins/define-plugin/) variable `REPO` in `webpack.config.js` and `webpack.prod.js`. **Be sure to take a look at those files!**.

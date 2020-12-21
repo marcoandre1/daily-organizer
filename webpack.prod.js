@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
     mode: 'production',
@@ -11,12 +12,15 @@ module.exports = {
             template: 'index.html',
             repo: '/daily-organizer',
             inject: false
-          })
-      ],
+        }),
+        new webpack.DefinePlugin({
+            REPO: JSON.stringify('/daily-organizer')
+        })
+    ],
     output: {
         path: path.resolve(__dirname,'dist'),
         filename: 'bundle.js',
-        publicPath: '/',
+        publicPath: '/daily-organizer/',
     },
     resolve: {
         extensions: ['.js','.jsx']

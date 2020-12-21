@@ -8,7 +8,7 @@ import React from 'react';
 
 const Navigation = () => (
     <div className="header">
-        <Link to="/dashboard">
+        <Link to={`${REPO}/dashboard`}>
             <h1>
                 Daily Organizer
             </h1>

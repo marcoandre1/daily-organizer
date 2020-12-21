@@ -13,7 +13,7 @@ const Main = () => {
                     <ConnectedNavigation/>
                     <Route
                         exact
-                        path="/dashboard"
+                        path={`${REPO}/dashboard`}
                         render={ () => (<ConnectedDashboard/>)}
                     />
                 </div>
