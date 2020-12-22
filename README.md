@@ -1,8 +1,10 @@
 # Daily Organizer
 
+**Demo website:** [modokemdev.com/daily-organizer](https://modokemdev.com/daily-organizer/)  
+
 This repository was built to deploy a **Daily Organizer App** to [GitHub Pages](https://pages.github.com/) using [gh-pages](https://www.npmjs.com/package/gh-pages). This app uses [React](https://reactjs.org/) and [Redux](https://redux.js.org/) to display components. Routing determines which component to display. If you want to add a database, take a look at my GitHub repository [express-react-app](https://github.com/marcoandre1/express-react-app).
 
-> To run this project locally, clone the project and run `npm run dev`.  
+> To run this project locally, clone the project and run `npm install` followed by `npm run dev`.  
 > To deploy, use `git bash` and run `npm run deploy`.
 
 ## Index
