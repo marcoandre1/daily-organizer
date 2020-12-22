@@ -13,6 +13,7 @@ This repository was built to deploy a **Daily Organizer App** to [GitHub Pages](
 4. [Connect a Dashboard component to the Redux store](https://github.com/marcoandre1/daily-organizer#connect-a-dashboard-component-to-the-redux-store)  
 5. [Deploy to GitHub pages](https://github.com/marcoandre1/daily-organizer#deploy-to-github-pages)  
 6. [Add Routing and Navigation](https://github.com/marcoandre1/daily-organizer#add-routing-and-navigation)  
+7. [Add a mock saga to simulate interaction with the server](https://github.com/marcoandre1/daily-organizer#add-a-mock-saga-to-simulate-interaction-with-the-server)  
 
 ## Setting up a new project
 
@@ -394,7 +395,6 @@ export const Main = () =>(
         <Provider store={store}>
             <div className="container mt-3">
                 <ConnectedNavigation/>
-                {/*<ConnectedDashboard/>*/}
                 <Route
                     exact
                     path={`${REPO}/dashboard`}
@@ -407,3 +407,14 @@ export const Main = () =>(
 ```
 
 > **NOTE:** take a close look at the `REPO` variable. This is necessary because we are deploying to `https://<USERNAME>.github.io/<REPO>`. For this to work, you will need to add the [publicPath](https://webpack.js.org/guides/public-path/) configuration option and the [DefinePlugin](https://webpack.js.org/plugins/define-plugin/) variable `REPO` in `webpack.config.js` and `webpack.prod.js`. **Be sure to take a look at those files!**.
+
+## Add a mock saga to simulate interaction with the server
+
+- Add [Redux-Saga](https://redux-saga.js.org/): `npm install --save redux-saga`.  
+- Add [uuid](https://www.npmjs.com/package/uuid) to **generate random id**: `npm install --save uuid`.  
+- Add a new `mutations.js` file at `app/store/mutations.js`. This file is a template for all the changes to the application state.  
+- Add a new file at `store/sagas.mock.js`. **This is the file that simulates the interaction with the server!**.  
+- Add a new `TaskDetail` component at `app/components/TaskDetail.jsx`.  
+- Finally, update `store/index.js`, `TaskList.jsx` and `Main.jsx`.  
+
+> If you need more info, take a look at the original repo: [express-react-app](https://github.com/marcoandre1/express-react-app)  
