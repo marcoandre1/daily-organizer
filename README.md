@@ -21,17 +21,24 @@ This repository was built to deploy a **Daily Organizer App** to [GitHub Pages](
 
 > **NOTE:** the following steps allow you to set up a project from scratch. The output is very similar to what you would get with [Create React App](https://create-react-app.dev/docs/getting-started/). _The only difference is that you are going to understand the **magic** behind Create React App._  
 
-- Create a `package.json` file: `npm init --yes`.  
-- Install `Webpack`: `npm install --save-dev webpack`.  
-- Add `.gitignore` file and add `node_modules` and `dist` to it.  
-- Install other dependencies:  
-
 ```console
-npm install --save-dev webpack-cli webpack-dev-server
-npm install --save-dev @babel/core
-npm install --save-dev @babel/node @babel/preset-env @babel/preset-react @babel/register
-npm install --save-dev babel-loader
+# Generate package.json file
+$ npm init --yes
+
+# Install Webpack and related dependencies
+$ npm install --save-dev webpack webpack-cli webpack-dev-server
+
+# Install Babel and related dependencies
+$ npm install --save-dev @babel/core @babel/node @babel/preset-env @babel/preset-react @babel/register babel-loader
+
+# Install React and related dependencies
+$ npm install --save react react-dom react-redux
+
+# Add .gitignore file
+$ printf '%s\n' 'node_nodules' 'dist' > ./gitignore
 ```
+
+> **NOTE:** for more info on `printf`, see [this answer](https://unix.stackexchange.com/a/191695) in Stack Exchange.  
 
 - Add a `.babelrc` file:  
 
@@ -68,8 +75,7 @@ module.exports = {
         historyApiFallback: true,
         port: 8080,
         host: 'localhost',
-        open: true,
-        publicPath: '/'
+        open: true
     },
     module: {
         rules: [{
@@ -80,9 +86,6 @@ module.exports = {
 }
 ```
 
-> **NOTE:** As of [Webpack 5](https://webpack.js.org/blog/2020-10-10-webpack-5-release/), we need to specify `port`, `host`, `open`, `publicPath` options in `devServer` configuration. For more info, see: [error: option '--open <value>' argument missing](https://github.com/webpack/webpack-cli/issues/2001) and [webpack output is served from undefined](https://github.com/webpack/webpack-dev-server/issues/2745).  
-
-- Install **React**: `npm install --save react react-dom react-redux`.
 - Add a simple `Main.jsx` component at `src/app/components/Main.jsx`:
 
 ```jsx
@@ -108,7 +111,9 @@ ReactDOM.render(
 );
 ```
 
-- Add `index.html` to the root of the project:  
+- Add `index.html` to `dist` folder at the root of the project:  
+
+> **NOTE:** alternatively, you can setup [html-webpack-plugin](https://webpack.js.org/guides/output-management/#setting-up-htmlwebpackplugin). See the [getting started](https://webpack.js.org/guides/getting-started/#creating-a-bundle) tutorial from Webpack for more info.
 
 ```html
 <!DOCTYPE html>
@@ -147,8 +152,6 @@ ReactDOM.render(
   },
 }
 ```
-
-> **NOTE:** As of [Webpack 5](https://webpack.js.org/blog/2020-10-10-webpack-5-release/), the script command is not anymore `webpack-dev-server` but `webpack serve`. For more info, see: [webpack-dev-server](https://github.com/webpack/webpack-dev-server#webpack-dev-server) and [DevServer](https://webpack.js.org/configuration/dev-server/).  
 
 - Run the application: `npm run dev`.  
 
