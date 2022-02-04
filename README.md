@@ -155,7 +155,7 @@ ReactDOM.render(
 
 - Run the application: `npm run dev`.  
 
-> Because we specify the `open: true` option in `webpack.config.js`, your browser should open automatically. If does not open it and navigate to <http://localhost:8080/>. You should see `Daily Organizer` displayed on the top left of the screen.  
+> Because we specify the `open: true` option in `webpack.config.js`, your browser should open automatically. If not, navigate to <http://localhost:8080/>. You should see `Daily Organizer` displayed on the top left of the screen.  
 
 ## Create default application state as JSON file for development
 
