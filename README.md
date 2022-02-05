@@ -2,31 +2,43 @@
 
 **Demo website:** [modokemdev.com/daily-organizer](https://modokemdev.com/daily-organizer/)  
 
-This repository was built to deploy a **Daily Organizer App** to [GitHub Pages](https://pages.github.com/) using [gh-pages](https://www.npmjs.com/package/gh-pages). This app uses [React](https://reactjs.org/) and [Redux](https://redux.js.org/) to display components. Routing determines which component to display. If you want to add a database, take a look at my GitHub repository [express-react-app](https://github.com/marcoandre1/express-react-app).
+This repository was built to deploy a **Daily Organizer App** to [GitHub Pages](https://pages.github.com/) using [gh-pages](https://www.npmjs.com/package/gh-pages). This app uses [React](https://reactjs.org/) and [Redux](https://redux.js.org/) to display components. Routing determines which component to display.  
 
-> To run this project locally, clone the project and run `npm install` followed by `npm run dev`.  
-> To deploy, use `git bash` and run `npm run deploy`.
+> This **README** focuses on deploying a [React](https://reactjs.org/) app to to [GitHub Pages](https://pages.github.com/). For more details on the project, take a look at my GitHub repository [express-react-app](https://github.com/marcoandre1/express-react-app).
 
-## Index
+To run this project locally, clone the project and run:  
 
-1. [Setting up a new project](https://github.com/marcoandre1/daily-organizer#setting-up-a-new-project)  
-2. [Create default application state as JSON file for development](https://github.com/marcoandre1/daily-organizer#create-default-application-state-as-JSON-file-for-development)  
-3. [Create Redux store](https://github.com/marcoandre1/daily-organizer#create-redux-store)  
-4. [Connect a Dashboard component to the Redux store](https://github.com/marcoandre1/daily-organizer#connect-a-dashboard-component-to-the-redux-store)  
-5. [Deploy to GitHub pages](https://github.com/marcoandre1/daily-organizer#deploy-to-github-pages)  
-6. [Add Routing and Navigation](https://github.com/marcoandre1/daily-organizer#add-routing-and-navigation)  
-7. [Add a mock saga to simulate interaction with the server](https://github.com/marcoandre1/daily-organizer#add-a-mock-saga-to-simulate-interaction-with-the-server)  
+```bash
+# install node_modules
+$ npm install
+
+# run the project
+$ npm run dev
+
+# deploy to gh-pages (use git bash)
+$ npm run deploy
+```
+
+## Table of Contents
+
+- [Daily Organizer](#daily-organizer)
+  - [Table of Contents](#table-of-contents)
+  - [Setting up a new project](#setting-up-a-new-project)
+  - [Deploy to GitHub pages](#deploy-to-github-pages)
+    - [For more info, take a look at the following references](#for-more-info-take-a-look-at-the-following-references)
+  - [Add Routing and Navigation in GitHub Pages](#add-routing-and-navigation-in-github-pages)
+  - [Acknowledgements](#acknowledgements)
 
 ## Setting up a new project
 
 > **NOTE:** the following steps allow you to set up a project from scratch. The output is very similar to what you would get with [Create React App](https://create-react-app.dev/docs/getting-started/). _The only difference is that you are going to understand the **magic** behind Create React App._  
 
-```console
+```bash
 # Generate package.json file
 $ npm init --yes
 
 # Install Webpack and related dependencies
-$ npm install --save-dev webpack webpack-cli webpack-dev-server
+$ npm install --save-dev webpack webpack-cli webpack-dev-server html-webpack-plugin
 
 # Install Babel and related dependencies
 $ npm install --save-dev @babel/core @babel/node @babel/preset-env @babel/preset-react @babel/register babel-loader
@@ -63,6 +75,12 @@ const path = require("path");
 module.exports = {
     mode: 'development',
     entry: path.resolve(__dirname, 'src','app'),
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: 'index.html',
+            inject: false
+        })
+    ],
     output: {
         path: path.resolve(__dirname,'dist'),
         filename: 'bundle.js',
@@ -111,9 +129,9 @@ ReactDOM.render(
 );
 ```
 
-- Add `index.html` to `dist` folder at the root of the project:  
+- Add an `index.html` file:  
 
-> **NOTE:** alternatively, you can setup [html-webpack-plugin](https://webpack.js.org/guides/output-management/#setting-up-htmlwebpackplugin). See the [getting started](https://webpack.js.org/guides/getting-started/#creating-a-bundle) tutorial from Webpack for more info.
+> **NOTE:** You can manually add the `index.html` file to the `dist` folder at the root of the project but it is advised to setup [html-webpack-plugin](https://webpack.js.org/guides/output-management/#setting-up-htmlwebpackplugin). See the [getting started](https://webpack.js.org/guides/getting-started/#creating-a-bundle) tutorial from Webpack for more info.
 
 ```html
 <!DOCTYPE html>
@@ -153,178 +171,14 @@ ReactDOM.render(
 }
 ```
 
-- Run the application: `npm run dev`.  
+- Run the application:  
+
+```bash
+# start webpack-dev-server
+$ npm run dev
+```
 
 > Because we specify the `open: true` option in `webpack.config.js`, your browser should open automatically. If not, navigate to <http://localhost:8080/>. You should see `Daily Organizer` displayed on the top left of the screen.  
-
-## Create default application state as JSON file for development
-
-- Add `src/server/defaultState.js` file:
-
-```js
-export const defaultState = {
-    users:[{
-        id:"U1",
-        name:"Dev"
-    },{
-        id:"U2",
-        name:"C. Eeyo"
-    }],
-    groups:[{
-        name:"To Do",
-        id:"G1",
-        owner:"U1"
-    },{
-        name:"Doing",
-        id:"G2",
-        owner:"U1"
-    },{
-        name:"Done",
-        id:"G3",
-        owner:"U1"
-    }
-    ],
-    tasks:[{
-        name:"Refactor tests",
-        id:"T1",
-        group:"G1",
-        owner:"U1",
-        isComplete:false,
-    },{
-        name:"Meet with CTO",
-        id:"T2",
-        group:"G1",
-        owner:"U1",
-        isComplete:true,
-    },{
-        name:"Compile ES6",
-        id:"T3",
-        group:"G2",
-        owner:"U2",
-        isComplete:false,
-    },{
-        name:"Update component snapshots",
-        id:"T4",
-        group:"G2",
-        owner:"U1",
-        isComplete:true,
-    },{
-        name:"Production optimizations",
-        id:"T5",
-        group:"G3",
-        owner:"U1",
-        isComplete:false,
-    }],
-    comments:[{
-        owner:"U1",
-        id:"C1",
-        task:"T1",
-        content:"Great work!"
-    }]
-};
-```
-
-## Create Redux store
-
-- Install Redux: `npm install --save redux`.
-- Create **Redux store** at `src/app/store/index.jsx`:
-
-```jsx
-import { createStore } from 'redux';
-import { defaultState } from '../../server/defaultState';
-
-export const store = createStore(
-    function reducer (state = defaultState, action) {
-        return state;
-    }
-);
-```
-
-## Connect a Dashboard component to the Redux store
-
-- Add the `Dashboard` component at `src/app/components/Dashboard.jsx`:  
-
-```jsx
-/**
- * The dashboard is a simple React component that contains several lists of tasks,
- * one for each group that belongs to the user.
- */
-
-import React from 'react';
-import { connect } from 'react-redux';
-import { ConnectedTaskList } from './TaskList';
-
-export const Dashboard = ({groups}) => (
-    <div>
-        <h2>Dashboard</h2>
-        {groups.map(group=>(
-            <ConnectedTaskList key={group.id} id={group.id} name={group.name}/>
-        ))}
-    </div>
-);
-
-function mapStateToProps(state) {
-    return {
-        groups:state.groups
-    }
-}
-
-export const ConnectedDashboard = connect(mapStateToProps)(Dashboard);
-```
-
-- Add the `TaskList` component at `src/app/components/TaskList.jsx`:  
-
-```jsx
-import React from 'react';
-import { connect } from 'react-redux';
-
-export const TaskList = ({tasks, name}) => (
-    <div className="card p-2 m-2">
-        <h3>
-            {name}
-        </h3>
-        <div>
-            {tasks.map(task=>(
-                <div key={task.id}>{task.name}</div>
-            ))}
-        </div>
-    </div>
-);
-
-const mapStateToProps = (state, ownProps) => {
-    let groupID = ownProps.id;
-    return {
-        name: ownProps.name,
-        id: groupID,
-        tasks: state.tasks.filter(task=>task.group === groupID)
-    };
-};
-
-export const ConnectedTaskList = connect(mapStateToProps)(TaskList);
-```
-
-- Update `Main` component to include the **Redux store** and the `Dashboard` component:
-
-```jsx
-import React from 'react';
-import { Provider } from 'react-redux';
-import { store } from '../store';
-import { ConnectedDashboard } from "./Dashboard";
-
-const Main = () => {
-    return (
-        <Provider store={store}>
-            <div className="container mt-3">
-                <ConnectedDashboard/>
-            </div>
-        </Provider>
-    );
-};
-
-export default Main;
-```
-
-> Now, if you run: `npm run dev`, you should see the _default tasks_ loaded to your browser.
 
 ## Deploy to GitHub pages
 
@@ -358,21 +212,19 @@ Finally, because we are deploying to `https://<USERNAME>.github.io/<REPO>`, you 
 6. [Webpack Development](https://webpack.js.org/guides/development/).  
 7. [Webpack Production](https://webpack.js.org/guides/production/).  
 
-## Add Routing and Navigation
+## Add Routing and Navigation in GitHub Pages
+
+> **NOTE:** take a close look at the `REPO` variable in the code below. The `REPO` variable is **necessary** because we are deploying to `https://<USERNAME>.github.io/<REPO>`. For this to work, we need to add the [publicPath](https://webpack.js.org/guides/public-path/) configuration option and the [DefinePlugin](https://webpack.js.org/plugins/define-plugin/) variable `REPO` in `webpack.config.js` and `webpack.prod.js`. **Be sure to take a look at those files!**.
 
 - Add **react-router-dom**: `npm install react-router-dom --save`.  
 - Add a new `Navigation` component at `src/app/components/Navigation.jsx`:
 
 ```jsx
-/**
- * The navigation component is present on all non-login pages,
- * and contains a link back to the dashboard, and the user's name.
- */
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
-const Navigation = ()=>(
+const Navigation = () => (
     <div className="header">
         <Link to={`${REPO}/dashboard`}>
             <h1>
@@ -392,34 +244,35 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from '../store';
 import { ConnectedDashboard } from './Dashboard';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, } from 'react-router-dom';
 import { ConnectedNavigation } from './Navigation';
+import { ConnectedTaskDetail} from './TaskDetail';
 
-export const Main = () =>(
-    <BrowserRouter>
-        <Provider store={store}>
-            <div className="container mt-3">
-                <ConnectedNavigation/>
-                <Route
-                    exact
-                    path={`${REPO}/dashboard`}
-                    render={ () => (<ConnectedDashboard/>)}
-                />
-            </div>
-        </Provider>
-    </BrowserRouter>
-);
+const Main = () => {
+    return (
+        <BrowserRouter>
+            <Provider store={store}>
+                <div className="container mt-3">
+                    <ConnectedNavigation/>
+                    <Route
+                        exact
+                        path={`${REPO}/dashboard`}
+                        render={ () => (<ConnectedDashboard/>)}
+                    />
+                    <Route
+                        exact
+                        path={`${REPO}/task/:id`}
+                        render={ ({ match }) => (<ConnectedTaskDetail match={ match }/>)}
+                    />
+                </div>
+            </Provider>
+        </BrowserRouter>
+    );
+};
+
+export default Main;
 ```
 
-> **NOTE:** take a close look at the `REPO` variable. This is necessary because we are deploying to `https://<USERNAME>.github.io/<REPO>`. For this to work, you will need to add the [publicPath](https://webpack.js.org/guides/public-path/) configuration option and the [DefinePlugin](https://webpack.js.org/plugins/define-plugin/) variable `REPO` in `webpack.config.js` and `webpack.prod.js`. **Be sure to take a look at those files!**.
+## Acknowledgements
 
-## Add a mock saga to simulate interaction with the server
-
-- Add [Redux-Saga](https://redux-saga.js.org/): `npm install --save redux-saga`.  
-- Add [uuid](https://www.npmjs.com/package/uuid) to **generate random id**: `npm install --save uuid`.  
-- Add a new `mutations.js` file at `app/store/mutations.js`. This file is a template for all the changes to the application state.  
-- Add a new file at `store/sagas.mock.js`. **This is the file that simulates the interaction with the server!**.  
-- Add a new `TaskDetail` component at `app/components/TaskDetail.jsx`.  
-- Finally, update `store/index.js`, `TaskList.jsx` and `Main.jsx`.  
-
-> If you need more info, take a look at the original repo: [express-react-app](https://github.com/marcoandre1/express-react-app)  
+For more info, take a look at my original repo: [express-react-app](https://github.com/marcoandre1/express-react-app).  
