@@ -15,3 +15,12 @@ export function* taskCreationSaga(){
         yield put(mutations.createTask(taskID, groupID, ownerID));
     }
 }
+
+export function* commentCreationSaga(){
+    while (true){
+        const {taskID} = yield take(mutations.REQUEST_COMMENT_CREATION);
+        const ownerID = 'U1';
+        const commentID = uuid();
+        yield put(mutations.createComment(commentID, taskID, ownerID));
+    }
+}

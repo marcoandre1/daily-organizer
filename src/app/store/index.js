@@ -39,7 +39,16 @@ export const store = createStore (
             }
             return tasks;
         },
-        comments(comments = defaultState.comments) {
+        comments(comments = defaultState.comments, action) {
+            switch (action.type) {
+                case mutations.CREATE_COMMENT:
+                    return [...comments, {
+                        id: action.commentID,
+                        content: "New Comment",
+                        task: action.taskID,
+                        owner: action.ownerID
+                    }];
+            }
             return comments;
         },
         groups(groups = defaultState.groups) {
