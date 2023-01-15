@@ -15,7 +15,8 @@ const TaskDetail = ({
                         groups,
                         setTaskCompletion,
                         setTaskGroup,
-                        setTaskName
+                        setTaskName,
+                        createNewComment
                     }) => {
     return (
         <div className="card p-3 col-6">
@@ -40,10 +41,27 @@ const TaskDetail = ({
                 </select>
             </form>
 
-            <form className="form-inline">
+            <div>
+                {comments.map(comment => (
+                    <span key={comment.id}>
+                        <div>{comment.content}</div>
+                    </span>
+                ))}
+            </div>
+
+            <div>
+                <input type="text" name="commentContents" autoComplete="off" placeholder="Add a comment" className="form-control form-control-lg"/>
+            </div>
+
+            <button  className="btn btn-primary ml-2" onClick={() => createNewComment(id)}>
+                Submit
+            </button>
+            
+            {/* The submit type button provokes a redirect. Doesn't work as intended for my purpose. Maybe if I had an edit comment component? */}
+            {/* <form className="form-inline">
                 <input type="text" name="commentContents" autoComplete="off" placeholder="Add a comment" className="form-control"/>
-                <button type="submit" className="btn">Submit</button>
-            </form>
+                <button type="submit" className="btn" onClick={ () => createNewComment(id) }>Submit</button>
+            </form> */}
 
             <div>
                 <Link to={`${REPO}/dashboard`}>
@@ -60,12 +78,14 @@ function mapStateToProps(state, ownProps){
     let id = ownProps.match.params.id;
     let task = state.tasks.find(task => task.id === id);
     let groups = state.groups;
+    let comments = state.comments.filter(comment => comment.task === id)
 
     return {
         id,
         task,
         groups,
-        isComplete: task.isComplete
+        isComplete: task.isComplete,
+        comments
     }
 }
 
@@ -80,6 +100,9 @@ function mapDispatchToProps(dispatch, ownProps){
         },
         setTaskName(e){
             dispatch(mutations.setTaskName(id, e.target.value));
+        },
+        createNewComment(id) {
+            dispatch(mutations.requestCommentCreation(id));
         }
     }
 }
