@@ -36,14 +36,16 @@ export const setTaskName = (id, name) => ({
     name
 });
 
-export const requestCommentCreation = (taskID) => ({
+export const requestCommentCreation = (taskID, content) => ({
     type: REQUEST_COMMENT_CREATION,
     taskID,
+    content
 });
 
-export const createComment = (commentID, taskID, ownerID) => ({
+export const createComment = (commentID, taskID, ownerID, content) => ({
     type: CREATE_COMMENT,
     commentID,
     taskID,
-    ownerID
+    ownerID,
+    content
 });
