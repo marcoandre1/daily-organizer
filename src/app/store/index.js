@@ -44,7 +44,7 @@ export const store = createStore (
                 case mutations.CREATE_COMMENT:
                     return [...comments, {
                         id: action.commentID,
-                        content: "New Comment",
+                        content: action.content,
                         task: action.taskID,
                         owner: action.ownerID
                     }];

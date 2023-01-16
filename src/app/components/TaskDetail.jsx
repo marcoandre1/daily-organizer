@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as mutations from '../store/mutations';
+import { ConnectedCommentForm } from './CommentForm';
 
 const TaskDetail = ({
                         id,
@@ -15,8 +16,7 @@ const TaskDetail = ({
                         groups,
                         setTaskCompletion,
                         setTaskGroup,
-                        setTaskName,
-                        createNewComment
+                        setTaskName
                     }) => {
     return (
         <div className="card p-3 col-6">
@@ -49,19 +49,7 @@ const TaskDetail = ({
                 ))}
             </div>
 
-            <div>
-                <input type="text" name="commentContents" autoComplete="off" placeholder="Add a comment" className="form-control form-control-lg"/>
-            </div>
-
-            <button  className="btn btn-primary ml-2" onClick={() => createNewComment(id)}>
-                Submit
-            </button>
-            
-            {/* The submit type button provokes a redirect. Doesn't work as intended for my purpose. Maybe if I had an edit comment component? */}
-            {/* <form className="form-inline">
-                <input type="text" name="commentContents" autoComplete="off" placeholder="Add a comment" className="form-control"/>
-                <button type="submit" className="btn" onClick={ () => createNewComment(id) }>Submit</button>
-            </form> */}
+            <ConnectedCommentForm id={task.id}/>
 
             <div>
                 <Link to={`${REPO}/dashboard`}>
@@ -100,9 +88,6 @@ function mapDispatchToProps(dispatch, ownProps){
         },
         setTaskName(e){
             dispatch(mutations.setTaskName(id, e.target.value));
-        },
-        createNewComment(id) {
-            dispatch(mutations.requestCommentCreation(id));
         }
     }
 }
